@@ -1,5 +1,6 @@
 package com.patika.bloghubservice.service;
 
+import com.patika.bloghubservice.dto.response.UserResponse;
 import com.patika.bloghubservice.model.BlogComment;
 import com.patika.bloghubservice.model.User;
 import com.patika.bloghubservice.model.enums.Blog;
@@ -11,18 +12,21 @@ import org.springframework.stereotype.Service;
 
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class BlogService {
     private final BlogRepository blogRepository;
-    private final UserService userService;
+    //private final UserService userService;
+    private final UserRepository userRepository;  //Wrong Format
 
     public Blog createBlog(String email, Blog requestBlog) {
 
-        User foundUser = userService.getUserByEmail(email);
+        //User foundUser = userService.getUserByEmail(email);
+        Optional<User> foundUser = userRepository.findByEmail(email);
 
-        Blog blog = new Blog(requestBlog.getTitle(), requestBlog.getText(), foundUser);
+        Blog blog = new Blog(requestBlog.getTitle(), requestBlog.getText(), foundUser.get());
 
         blogRepository.save(blog);
 
@@ -39,15 +43,16 @@ public class BlogService {
     public void addCommets(String title, String email, String commet) {
         Blog foundBlog = getBlogByTitle(title);
 
-        User user=userService.getUserByEmail(email);
+        //User user=userService.getUserByEmail(email);
+        Optional<User> user = userRepository.findByEmail(email);
 
-        BlogComment blogComment = new BlogComment(user, commet);
+        BlogComment blogComment = new BlogComment(user.get(), commet);
 
         foundBlog.getBlogCommentList().add(blogComment);
 
         blogRepository.addComment(title, foundBlog);
 
-        foundBlog.getBlogCommentList().add(new BlogComment(user, commet));
+       // foundBlog.getBlogCommentList().add(new BlogComment(user, commet));
 
 
     }
@@ -55,9 +60,10 @@ public class BlogService {
     public List<Blog> getBlogsFilterByStatus(BlogStatus blogStatus, String email) {
         UserService userService = new UserService(new UserRepository());
 
-        User foundUser = userService.getUserByEmail(email);
+        //User foundUser = userService.getUserByEmail(email);
+        Optional<User> foundUser = userRepository.findByEmail(email);
 
-        return foundUser.getBlogList().stream()
+        return foundUser.get().getBlogList().stream()
                 .filter(blog -> blogStatus.equals(blog.getBlogStatus()))
                 .toList();
     }

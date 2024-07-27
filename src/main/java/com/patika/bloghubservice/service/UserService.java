@@ -1,6 +1,9 @@
 package com.patika.bloghubservice.service;
 
 
+import com.patika.bloghubservice.converter.UserConverter;
+import com.patika.bloghubservice.dto.request.UserSafeRequest;
+import com.patika.bloghubservice.dto.response.UserResponse;
 import com.patika.bloghubservice.model.User;
 import com.patika.bloghubservice.model.enums.StatusType;
 import com.patika.bloghubservice.repository.UserRepository;
@@ -10,49 +13,57 @@ import org.springframework.stereotype.Service;
 import javax.management.RuntimeErrorException;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
 //@AllArgsConstructor
-public class  UserService {
+public class UserService {
     private UserRepository userRepository;
+
     private String spliter = ",";
 
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
+
     }
 
-    public User saveUser(User user) {
+    public UserResponse saveUser(UserSafeRequest request) {
 
 
-        User savedUser = new User(user.getEmail(), user.getPassword());
+        User savedUser = new User(request.getEmail(), request.getPassword());
 
-        System.out.println("User saved: " + user.getEmail() + spliter + user.getPassword());
+        System.out.println("User saved: " + request.getEmail() + spliter + request.getPassword());
 
         userRepository.save(savedUser);
 
-        return savedUser;
+
+        return UserConverter.toResponse(savedUser);
 
     }
 
-    public User getUserByEmail(String email) {
+    public UserResponse getUserByEmail(String email) {
 
-        return userRepository.findByEmail(email)
+        User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User Bulunamadı."));
+
+        return UserConverter.toResponse(user);
     }
 
-    public List<User> getAllUsers() {
+    public List<UserResponse> getAllUsers() {
+        List<User> users = userRepository.findAll();
 
-        return userRepository.findAll();
+        return UserConverter.toResponse(users);
     }
 
     public void changeStatus(String email, StatusType statusType) {
 
-        User foundUser = getUserByEmail(email);
-        foundUser.setStatusType(statusType);
+        Optional<User> foundUser = userRepository.findByEmail(email);
 
-        userRepository.changeStatus(email, foundUser);
+        foundUser.get().setStatusType(statusType);
+
+        userRepository.changeStatus(email, foundUser.get());
         //getUserByEmail(email).setStatusType(statusType);
     }
 
@@ -74,7 +85,10 @@ public class  UserService {
     }
 
     public Map<String, User> getAllUsersMap() {
-        return getAllUsers().stream()
+//        return getAllUsers().stream()
+//                .collect(Collectors.toMap(User::getEmail, Function.identity()));
+        return userRepository.findAll()
+                .stream()
                 .collect(Collectors.toMap(User::getEmail, Function.identity()));
 
     }

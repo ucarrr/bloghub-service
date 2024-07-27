@@ -61,3 +61,5 @@ thymeleaf --> frontend
 
 
 post vs get   
+
+in DTO java record vs class
