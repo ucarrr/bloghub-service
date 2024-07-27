@@ -1,0 +1,63 @@
+Build Sytem Maven: 2 Önemli Build tool
+hem Dependency leri yönetmek için hemde uygulamamızı build etmek
+içim kullandığım araç
+
+
+layered architecture -->
+Katmanlı Mimari
+   User Interface
+   Business Logic
+   Data
+
+User ile etkileşimli olduğumuz katman Controller(Controller katmanı USerdan Gelen İstekler)
+Business Logic işlettiğimiz katman servis katmanı(Bize bir Hizmet Sunacak controller katmanına)
+DATA Katmanı(REPOSİTORY) Servis Katmanına hizmet ediyor olacak(Veri Sunuyor Olacak)
+
+      
+      Controller -----> Service Katmanı --------> Repository (or DAO)
+
+
+Presible
+   SOLID
+   DRY
+   KISS     
+   YAGNI
+
+Stream --> https://bilisim.io/2022/06/07/hayat-kurtaran-java-stream-komutlari/
+       --> https://medium.com/@cemdrman/hayat-kurtaran-java-stream-komutlar%C4%B1-bcb145f6c0eb
+
+java servlet --> 
+                     Jakarta/Java EE içerisinde yer alan Servlet sunucu (server) – istemci (client) tabanlı uygulamaların haberleşmesini yönetmek için kullanılan sınıf, arayüz ve paket topluluğudur.
+
+                     Servlet sunucuya bir istek geldiğinde sırayla çalışacak metotları belirtir.
+
+                     Bu metotlar Servlet yaşam döngüsü olarakta adlandırılır.         
+
+
+Jakarta EE
+
+Head First Servlets and JSP  
+
+spring annotations  -->
+                           https://www.baeldung.com/spring-core-annotations
+
+
+Java JSF
+
+spring initializr -->
+                        https://start.spring.io/
+
+toncat
+netty                        
+
+
+------------------------------------------ HAFTA 2 ---------------------------------------------------------------------------------
+
+spring boot annotations
+   --> https://medium.com/@faruk.ozelll/spring-bootta-sıklıkla-kullanılan-önemli-anotasyonlar-anlamı-ve-kullanımı-369d4a66fe93 
+   --> https://bilisim.io/2016/12/31/rest-servis-best-practises/
+
+thymeleaf --> frontend
+
+
+post vs get   
