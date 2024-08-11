@@ -5,13 +5,14 @@ import com.patika.bloghubservice.model.User;
 
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Blog {
     private String title;
     private String text;
-    private LocalDate date;
+    private LocalDateTime createDate;
     private User user;
     private BlogStatus blogStatus;
     private Long likeCount;
@@ -21,7 +22,7 @@ public class Blog {
     public Blog(String title, String text, User user) {
         this.title = title;
         this.text = text;
-        this.date = LocalDate.now();
+        this.createDate = LocalDateTime.now();
         this.user = user;
         this.blogStatus = BlogStatus.DRAFT;
         this.likeCount=0L;
@@ -43,12 +44,13 @@ public class Blog {
         this.text = text;
     }
 
-    public LocalDate getDate() {
-        return date;
+
+    public LocalDateTime getCreateDate() {
+        return createDate;
     }
 
-    public void setDate(LocalDate date) {
-        this.date = date;
+    public void setCreateDate(LocalDateTime createDate) {
+        this.createDate = createDate;
     }
 
     public User getUser() {
@@ -88,7 +90,7 @@ public class Blog {
         return "Blog{" +
                 "title='" + title + '\'' +
                 ", text='" + text + '\'' +
-                ", date=" + date +
+                ", date=" + createDate +
                 ", user=" + user +
                 ", blogStatus=" + blogStatus +
                 '}';

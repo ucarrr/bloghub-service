@@ -3,13 +3,14 @@ package com.patika.bloghubservice.model;
 import com.patika.bloghubservice.model.enums.Blog;
 import com.patika.bloghubservice.model.enums.StatusType;
 import com.patika.bloghubservice.model.enums.UserType;
+import lombok.Data;
 
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-
+@Data
 public class User {
     private String name;
     private String email;

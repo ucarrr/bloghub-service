@@ -63,3 +63,11 @@ thymeleaf --> frontend
 post vs get   
 
 in DTO java record vs class
+
+https://mapstruct.org/
+
+apache commons --> 
+
+log tutmak için özel kütüphaneler 
+   --> graylog
+   --> elk - elastic seacrh -- elk stack logstash config --> log ları görüntülemek için kullanıyor

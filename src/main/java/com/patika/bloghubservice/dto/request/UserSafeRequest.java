@@ -5,10 +5,7 @@ import com.patika.bloghubservice.model.SocialMedia;
 import com.patika.bloghubservice.model.enums.Blog;
 import com.patika.bloghubservice.model.enums.StatusType;
 import com.patika.bloghubservice.model.enums.UserType;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +15,7 @@ import java.util.Set;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 public class UserSafeRequest {
 
     private String name;

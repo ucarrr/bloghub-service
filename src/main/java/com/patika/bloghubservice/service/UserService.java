@@ -4,10 +4,13 @@ package com.patika.bloghubservice.service;
 import com.patika.bloghubservice.converter.UserConverter;
 import com.patika.bloghubservice.dto.request.UserSafeRequest;
 import com.patika.bloghubservice.dto.response.UserResponse;
+import com.patika.bloghubservice.exception.BlogHubException;
+import com.patika.bloghubservice.exception.ExceptionMessages;
 import com.patika.bloghubservice.model.User;
 import com.patika.bloghubservice.model.enums.StatusType;
 import com.patika.bloghubservice.repository.UserRepository;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.management.RuntimeErrorException;
@@ -19,6 +22,9 @@ import java.util.stream.Collectors;
 
 @Service
 //@AllArgsConstructor
+
+//Loglama İçin
+@Slf4j
 public class UserService {
     private UserRepository userRepository;
 
@@ -31,15 +37,28 @@ public class UserService {
 
     public UserResponse saveUser(UserSafeRequest request) {
 
+        if (request.getEmail() == null) {
+            log.error("request {}",request +"\n" + ExceptionMessages.EMAIL_IS_REQUIRED);
 
-        User savedUser = new User(request.getEmail(), request.getPassword());
+            throw new BlogHubException(ExceptionMessages.EMAIL_IS_REQUIRED);
+        }
 
-        System.out.println("User saved: " + request.getEmail() + spliter + request.getPassword());
+        Optional<User> optionalUser = userRepository.findByEmail(request.getEmail());
 
-        userRepository.save(savedUser);
+        if (optionalUser.isPresent()) {
+            throw new BlogHubException(ExceptionMessages.USER_ALREADY_EXISTS);
+        } else {
+            User savedUser = new User(request.getEmail(), request.getPassword());
 
+            System.out.println("User saved: " + request.getEmail() + spliter + request.getPassword());
 
-        return UserConverter.toResponse(savedUser);
+            userRepository.save(savedUser);
+
+            log.info("User saved");
+
+            return UserConverter.toResponse(savedUser);
+        }
+
 
     }
 

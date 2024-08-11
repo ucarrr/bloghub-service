@@ -1,5 +1,8 @@
 package com.patika.bloghubservice.service;
 
+import com.patika.bloghubservice.converter.BlogConverter;
+import com.patika.bloghubservice.dto.request.BlogSaveRequest;
+import com.patika.bloghubservice.dto.response.BlogResponse;
 import com.patika.bloghubservice.dto.response.UserResponse;
 import com.patika.bloghubservice.model.BlogComment;
 import com.patika.bloghubservice.model.User;
@@ -21,16 +24,16 @@ public class BlogService {
     //private final UserService userService;
     private final UserRepository userRepository;  //Wrong Format
 
-    public Blog createBlog(String email, Blog requestBlog) {
+    public BlogResponse createBlog(String email, BlogSaveRequest request) {
 
         //User foundUser = userService.getUserByEmail(email);
         Optional<User> foundUser = userRepository.findByEmail(email);
 
-        Blog blog = new Blog(requestBlog.getTitle(), requestBlog.getText(), foundUser.get());
+        Blog blog = new Blog(request.getTitle(), request.getText(), foundUser.get());
 
         blogRepository.save(blog);
 
-        return blog;
+        return BlogConverter.toResponse(blog);
 
     }
 
@@ -52,7 +55,7 @@ public class BlogService {
 
         blogRepository.addComment(title, foundBlog);
 
-       // foundBlog.getBlogCommentList().add(new BlogComment(user, commet));
+        // foundBlog.getBlogCommentList().add(new BlogComment(user, commet));
 
 
     }
@@ -95,7 +98,7 @@ public class BlogService {
     }
 
     public Long getLikeCountByTitle(String title) {
-        Blog blog=getBlogByTitle(title);
+        Blog blog = getBlogByTitle(title);
 
         return blog.getLikeCount();
     }
