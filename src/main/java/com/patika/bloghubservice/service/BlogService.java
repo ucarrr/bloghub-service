@@ -61,7 +61,7 @@ public class BlogService {
     }
 
     public List<Blog> getBlogsFilterByStatus(BlogStatus blogStatus, String email) {
-        UserService userService = new UserService(new UserRepository());
+        //UserService userService = new UserService(new UserRepository());
 
         //User foundUser = userService.getUserByEmail(email);
         Optional<User> foundUser = userRepository.findByEmail(email);

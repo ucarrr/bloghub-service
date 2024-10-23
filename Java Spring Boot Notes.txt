@@ -1,3 +1,10 @@
+Project Kurulum Yaparken 
+   spring boot dev tools
+   lombok
+   spring web
+
+Blog Service --> 
+
 Build Sytem Maven: 2 Önemli Build tool
 hem Dependency leri yönetmek için hemde uygulamamızı build etmek
 içim kullandığım araç
@@ -71,3 +78,44 @@ apache commons -->
 log tutmak için özel kütüphaneler 
    --> graylog
    --> elk - elastic seacrh -- elk stack logstash config --> log ları görüntülemek için kullanıyor
+
+
+
+
+pom.xml --> dependency
+
+         <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-openfeign</artifactId>
+            <version>4.1.0</version>
+        </dependency>
+
+
+--> Email Service ekledikten sonra
+EmailClient içinde bunu kullnadıktan sonra --> @FeignClient(value = "email-service", url = "http://localhost:8081/api/v1/emails")
+  Ana class içine -->  BloghubServiceApplication --> içine aşağıdaki annotation eklemeliyiz -->
+       @EnableFeignClients
+
+
+
+------------------------------------------ HAFTA 3 ---------------------------------------------------------------------------------       
+
+rabbitmq -->  
+message broker --> bir message broker istek atıyoruz kuyruktaki işlemleri sırayla oluyor
+kafka 
+   asenkron ve senkron haberleşme
+   producer ve concumer
+
+   event driven architecture --> her şeyi asenkronlaştırmaya çalışıyorlar
+
+https://bilisim.io/2020/06/24/spring-boot-ile-rabbitmq-kullanimi/
+http://localhost:15672/
+
+in pom.xml
+   <dependency>
+           <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-amqp</artifactId>
+   </dependency>
+
+java scheduler job   
+

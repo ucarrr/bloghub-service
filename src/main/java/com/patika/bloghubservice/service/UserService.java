@@ -1,19 +1,26 @@
 package com.patika.bloghubservice.service;
 
 
+import com.patika.bloghubservice.client.email.service.EmailClientService;
+import com.patika.bloghubservice.client.email.dto.request.EmailCreateRequest;
+import com.patika.bloghubservice.client.email.dto.request.enums.EmailTemplate;
+
+import com.patika.bloghubservice.client.payment.dto.request.PaymentRequest;
+import com.patika.bloghubservice.client.payment.service.PaymentClientService;
 import com.patika.bloghubservice.converter.UserConverter;
+import com.patika.bloghubservice.dto.producer.SendEmailMessage;
 import com.patika.bloghubservice.dto.request.UserSafeRequest;
 import com.patika.bloghubservice.dto.response.UserResponse;
 import com.patika.bloghubservice.exception.BlogHubException;
 import com.patika.bloghubservice.exception.ExceptionMessages;
 import com.patika.bloghubservice.model.User;
 import com.patika.bloghubservice.model.enums.StatusType;
+import com.patika.bloghubservice.producer.RabbitMqService;
 import com.patika.bloghubservice.repository.UserRepository;
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import javax.management.RuntimeErrorException;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -26,13 +33,20 @@ import java.util.stream.Collectors;
 //Loglama İçin
 @Slf4j
 public class UserService {
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+    private final EmailClientService emailClientService;
+    private final PaymentClientService paymentClientService;
+    private final RabbitMqService rabbitMqService;
+
 
     private String spliter = ",";
 
-    public UserService(UserRepository userRepository) {
-        this.userRepository = userRepository;
 
+    public UserService(UserRepository userRepository, EmailClientService emailClientService, PaymentClientService paymentClientService, RabbitMqService rabbitMqService) {
+        this.userRepository = userRepository;
+        this.emailClientService = emailClientService;
+        this.paymentClientService = paymentClientService;
+        this.rabbitMqService = rabbitMqService;
     }
 
     public UserResponse saveUser(UserSafeRequest request) {
@@ -53,6 +67,10 @@ public class UserService {
             System.out.println("User saved: " + request.getEmail() + spliter + request.getPassword());
 
             userRepository.save(savedUser);
+
+            rabbitMqService.sendEmail(new SendEmailMessage(request.getEmail(), EmailTemplate.CREATE_USER_TEMPLATE));
+            //emailClientService.sendEmail(new EmailCreateRequest(request.getEmail(), EmailTemplate.CREATE_USER_TEMPLATE));
+
 
             log.info("User saved");
 
@@ -82,7 +100,9 @@ public class UserService {
 
         foundUser.get().setStatusType(statusType);
 
-        userRepository.changeStatus(email, foundUser.get());
+        paymentClientService.createPayment(new PaymentRequest(new BigDecimal(100), email));
+        //userRepository.changeStatus(email, foundUser.get());
+
         //getUserByEmail(email).setStatusType(statusType);
     }
 

@@ -1,6 +1,7 @@
-package com.patika.bloghubservice.client.email;
+package com.patika.bloghubservice.client.email.service;
 
 
+import com.patika.bloghubservice.client.email.EmailClient;
 import com.patika.bloghubservice.client.email.dto.request.EmailCreateRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
